@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0ruut2thgwsq"]
+
+[ext_resource type="Script" uid="uid://cxc6h35c7j1un" path="res://src/progress/progress.gd" id="1_af8hp"]
+
+[node name="Progress" type="HSlider"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 16.0
+grow_horizontal = 2
+script = ExtResource("1_af8hp")

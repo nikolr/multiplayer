@@ -1,0 +1,106 @@
+[gd_scene load_steps=4 format=3 uid="uid://cl4jks7xpnmrn"]
+
+[ext_resource type="Script" uid="uid://brdgijv8fj12d" path="res://src/main.gd" id="1_eewff"]
+[ext_resource type="PackedScene" uid="uid://d0ruut2thgwsq" path="res://src/progress/progress.tscn" id="2_gh0ne"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
+bg_color = Color(0.219608, 0.247059, 0.278431, 1)
+
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "play_button", "pause_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_eewff")
+select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/AddAudioButton")
+file_dialog = NodePath("FileDialog")
+audio_stream_player = NodePath("AudioStreamPlayer")
+track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/TrackList")
+progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
+previous_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PreviousButton")
+play_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PlayButton")
+pause_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PauseButton")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_mun2e")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer2"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AddAudioButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+text = "Add audio"
+
+[node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TrackList" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Progress" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" node_paths=PackedStringArray("audio_stream_player") instance=ExtResource("2_gh0ne")]
+layout_mode = 2
+audio_stream_player = NodePath("../../../../../AudioStreamPlayer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="PreviousButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="PauseButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="NextButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.mp3")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
