@@ -73,6 +73,7 @@ theme_override_constants/separation = 38
 
 [node name="FadeOutSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" instance=ExtResource("2_3cfgd")]
 layout_mode = 2
+in_or_out = 1
 
 [node name="FadeInSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" instance=ExtResource("2_3cfgd")]
 layout_mode = 2
