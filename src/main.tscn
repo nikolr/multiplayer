@@ -91,14 +91,12 @@ alignment = 1
 [node name="PreviousButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+text = "<<"
 
 [node name="PauseButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-
-[node name="NextButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
+text = "Pause"
 
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Open a File"
