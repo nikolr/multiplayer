@@ -57,7 +57,8 @@ func _on_file_selected(path: String) -> void:
 	print(audio_queue)
 
 func _on_files_selected(paths: PackedStringArray) -> void:
-	pass
+	for path: String in paths:
+		_on_file_selected(path)
 
 func _on_remove_button_pressed(track_ui: TrackUi) -> void:
 	track_ui.button.pressed.disconnect(_on_track_play_button_pressed.bind(track_ui))

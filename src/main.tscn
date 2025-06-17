@@ -122,6 +122,14 @@ fade_out_slider = NodePath("../Control/PanelContainer2/MarginContainer/VBoxConta
 fade_in_slider = NodePath("../Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider")
 
 [node name="FileDialog" type="FileDialog" parent="."]
+title = "Open File(s)"
+ok_button_text = "Open"
+file_mode = 1
+access = 2
+filters = PackedStringArray("*.mp3")
+
+[node name="PlaylistFileDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
