@@ -26,6 +26,10 @@ func _ready() -> void:
 	previous_button.pressed.connect(_on_previous_button_pressed)
 	play_button.pressed.connect(_on_play_button_pressed)
 	pause_button.pressed.connect(_on_pause_button_pressed)
+	
+	progress.drag_ended.connect(_on_progress_slider_dragged)
+	
+	audio_stream_player.finished.connect(_on_audio_stream_player_finished)
 
 func _on_select_file_button_pressed() -> void:
 	file_dialog.show()
@@ -33,8 +37,7 @@ func _on_select_file_button_pressed() -> void:
 func _on_file_selected(path: String) -> void:
 	print(path)
 	var track: Track = Track.create(path)
-	#var audio_stream: AudioStreamMP3 = AudioStreamMP3.load_from_file(path)
-	#audio_queue.append(audio_stream)
+	#track.stream.loop = true
 	audio_queue.append(track)
 	var track_ui: TrackUi = TRACK.instantiate()
 	track_ui.set_track(track)
@@ -65,4 +68,18 @@ func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
 	audio_stream_player.stream = track_ui.track.stream
 	#audio_queue.erase(track_ui.track)
 	#audio_queue.push_front(track_ui.track)
+	audio_stream_player.play(playback_position)
+
+func _on_progress_slider_dragged(value_changed: bool) -> void:
+	progress.dragging = false
+	if not audio_stream_player.stream:
+		return
+	print(progress.value)
+	print(audio_stream_player.stream.get_length())
+	if audio_stream_player.playing and value_changed:
+		playback_position = (progress.value / 100.0) * audio_stream_player.stream.get_length()
+		audio_stream_player.seek(playback_position)
+
+func _on_audio_stream_player_finished() -> void:
+	playback_position = 0.0
 	audio_stream_player.play(playback_position)

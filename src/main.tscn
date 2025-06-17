@@ -63,7 +63,9 @@ text = "Add audio"
 layout_mode = 2
 
 [node name="TrackList" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 50
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
@@ -77,7 +79,6 @@ audio_stream_player = NodePath("../../../../../AudioStreamPlayer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
-mouse_filter = 2
 alignment = 1
 
 [node name="PreviousButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
