@@ -58,12 +58,16 @@ func _on_pause_button_pressed() -> void:
 		audio_stream_player.stop()
 
 func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
+	var tween: Tween = create_tween()
+	
 	if audio_stream_player.playing:
+		print(audio_stream_player.volume_linear)
 		playback_position = audio_stream_player.get_playback_position()
 	audio_stream_player.stream = track_ui.track.stream
 	#audio_queue.erase(track_ui.track)
 	#audio_queue.push_front(track_ui.track)
 	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+	tween.tween_property(audio_stream_player, "volume_linear", 1.0, 1.0).from(0.0)
 	audio_stream_player.play(playback_position)
 
 func _on_progress_slider_dragged(value_changed: bool) -> void:
