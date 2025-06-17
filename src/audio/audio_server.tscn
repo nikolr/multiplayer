@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://d26f0f6t0ome1"]
+
+[ext_resource type="Script" uid="uid://b871frwyak2lc" path="res://src/audio/audio_server.gd" id="1_y41jm"]
+
+[node name="DualAudioServer" type="Node" node_paths=PackedStringArray("primary_audio_server", "secondary_audio_server")]
+script = ExtResource("1_y41jm")
+primary_audio_server = NodePath("PrimaryAudioStreamPlayer")
+secondary_audio_server = NodePath("SecondaryAudioStreamPlayer")
+
+[node name="PrimaryAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="SecondaryAudioStreamPlayer" type="AudioStreamPlayer" parent="."]

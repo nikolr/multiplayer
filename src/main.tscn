@@ -1,14 +1,15 @@
-[gd_scene load_steps=6 format=3 uid="uid://cl4jks7xpnmrn"]
+[gd_scene load_steps=7 format=3 uid="uid://cl4jks7xpnmrn"]
 
 [ext_resource type="Script" uid="uid://brdgijv8fj12d" path="res://src/main.gd" id="1_eewff"]
 [ext_resource type="PackedScene" uid="uid://baniflrstponb" path="res://src/fade/fade.tscn" id="2_3cfgd"]
 [ext_resource type="PackedScene" uid="uid://duugmeoe7cj1c" path="res://src/volume/volume.tscn" id="2_5q4o7"]
 [ext_resource type="PackedScene" uid="uid://d0ruut2thgwsq" path="res://src/progress/progress.tscn" id="2_gh0ne"]
+[ext_resource type="PackedScene" uid="uid://d26f0f6t0ome1" path="res://src/audio/audio_server.tscn" id="5_fyndt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
 bg_color = Color(0.219608, 0.247059, 0.278431, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "pause_button", "fade_out_slider", "fade_in_slider")]
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "dual_audio_server", "track_list", "progress", "previous_button", "pause_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,13 +22,11 @@ select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxConta
 volume = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Volume")
 currently_playing_track_label = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/CurrentlyPlayingTrack")
 file_dialog = NodePath("FileDialog")
-audio_stream_player = NodePath("AudioStreamPlayer")
+dual_audio_server = NodePath("DualAudioServer")
 track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/TrackList")
 progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
 previous_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PreviousButton")
 pause_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PauseButton")
-fade_out_slider = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeOutSlider")
-fade_in_slider = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -99,9 +98,9 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="Progress" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" node_paths=PackedStringArray("audio_stream_player") instance=ExtResource("2_gh0ne")]
+[node name="Progress" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" node_paths=PackedStringArray("dual_audio_server") instance=ExtResource("2_gh0ne")]
 layout_mode = 2
-audio_stream_player = NodePath("../../../../../AudioStreamPlayer")
+dual_audio_server = NodePath("../../../../../DualAudioServer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -117,13 +116,15 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 text = "Pause"
 
+[node name="DualAudioServer" parent="." node_paths=PackedStringArray("fade_out_slider", "fade_in_slider") instance=ExtResource("5_fyndt")]
+fade_out_slider = NodePath("../Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeOutSlider")
+fade_in_slider = NodePath("../Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider")
+
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
 access = 2
 filters = PackedStringArray("*.mp3")
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [editable path="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider"]

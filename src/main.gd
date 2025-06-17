@@ -5,14 +5,12 @@ class_name Main extends Node
 @export var volume: Volume
 @export var currently_playing_track_label: Label
 @export var file_dialog: FileDialog
-@export var audio_stream_player: AudioStreamPlayer
+@export var dual_audio_server: DualAudioServer
 @export var track_list: VBoxContainer
 @export var progress: Progress
 @export var previous_button: Button
 @export var pause_button: Button
 
-@export var fade_out_slider: Fade
-@export var fade_in_slider: Fade
 #endregion
 
 #region Constants
@@ -28,12 +26,14 @@ var transitioning: bool = false
 func _ready() -> void:
 	select_file_button.pressed.connect(_on_select_file_button_pressed)
 	file_dialog.file_selected.connect(_on_file_selected)
+	file_dialog.files_selected.connect(_on_files_selected)
 	previous_button.pressed.connect(_on_previous_button_pressed)
 	pause_button.pressed.connect(_on_pause_button_pressed)
 	
 	progress.drag_ended.connect(_on_progress_slider_dragged)
 	
-	audio_stream_player.finished.connect(_on_audio_stream_player_finished)
+	dual_audio_server.primary_audio_server.finished.connect(_on_dual_audio_server_finished.bind(dual_audio_server.primary_audio_server))
+	dual_audio_server.secondary_audio_server.finished.connect(_on_dual_audio_server_finished.bind(dual_audio_server.secondary_audio_server))
 
 func _on_select_file_button_pressed() -> void:
 	file_dialog.show()
@@ -51,10 +51,13 @@ func _on_file_selected(path: String) -> void:
 	track_ui.remove_button.pressed.connect(_on_remove_button_pressed.bind(track_ui))
 	
 	track_list.add_child(track_ui)
-	if not audio_stream_player.stream:
+	if not dual_audio_server.currently_in_use.stream:
 		var primary_track = audio_queue[0]
-		audio_stream_player.stream = primary_track.stream
+		dual_audio_server.currently_in_use.stream = primary_track.stream
 	print(audio_queue)
+
+func _on_files_selected(paths: PackedStringArray) -> void:
+	pass
 
 func _on_remove_button_pressed(track_ui: TrackUi) -> void:
 	track_ui.button.pressed.disconnect(_on_track_play_button_pressed.bind(track_ui))
@@ -62,9 +65,9 @@ func _on_remove_button_pressed(track_ui: TrackUi) -> void:
 	track_ui.down_button.pressed.disconnect(_on_down_button_pressed.bind(track_ui))
 	track_ui.remove_button.pressed.disconnect(_on_remove_button_pressed.bind(track_ui))
 	track_list.remove_child(track_ui)
-	if audio_stream_player.stream == track_ui.track.stream:
-		playback_position = audio_stream_player.get_playback_position()
-		audio_stream_player.stop()
+	if dual_audio_server.currently_in_use.stream == track_ui.track.stream:
+		playback_position = dual_audio_server.currently_in_use.get_playback_position()
+		dual_audio_server.currently_in_use.stop()
 
 func _on_up_button_pressed(track_ui: TrackUi) -> void:
 	var position_in_track_list: int = track_list.get_children().find(track_ui)
@@ -80,48 +83,42 @@ func _on_down_button_pressed(track_ui: TrackUi) -> void:
 
 func _on_previous_button_pressed() -> void:
 	playback_position = 0.0
-	if audio_stream_player.playing:
-		audio_stream_player.play(playback_position)
+	if dual_audio_server.currently_in_use.playing:
+		dual_audio_server.currently_in_use.play(playback_position)
 
 func _on_pause_button_pressed() -> void:
-	if audio_stream_player.stream and audio_stream_player.playing:
-		playback_position = audio_stream_player.get_playback_position()
-		audio_stream_player.stop()
+	if dual_audio_server.currently_in_use.stream and dual_audio_server.currently_in_use.playing:
+		playback_position = dual_audio_server.currently_in_use.get_playback_position()
+		dual_audio_server.currently_in_use.stop()
 
 func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
-	if transitioning:
-		return
-	transitioning = true
-	var fade_out_tween: Tween = create_tween()
-	var fade_out_duration: float = fade_out_slider.fade_slider.value
-	var fade_in_duration: float = fade_in_slider.fade_slider.value
-	if audio_stream_player.playing:
-		playback_position = audio_stream_player.get_playback_position()
-		fade_out_tween.tween_property(audio_stream_player, "volume_linear", 0.0, fade_out_duration).from(1.0)
-		await get_tree().create_timer(fade_out_duration).timeout
-		fade_out_tween.kill()
+	if dual_audio_server.currently_in_use.playing:
+		playback_position = dual_audio_server.currently_in_use.get_playback_position()
+	dual_audio_server.transition(track_ui)
+	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+	print("Playback position: ", playback_position)
+	dual_audio_server.currently_in_use.play(playback_position)
 	for t: TrackUi in track_list.get_children():
 		t.panel.hide()
-	audio_stream_player.stream = track_ui.track.stream
-	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
-	var fade_in_tween: Tween = create_tween()
-	audio_stream_player.play(playback_position)
+	#dual_audio_server.currently_in_use.stream = track_ui.track.stream
+	#currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+	#dual_audio_server.currently_in_use.play(playback_position)
 	track_ui.panel.show()
-	fade_in_tween.tween_property(audio_stream_player, "volume_linear", 1.0, fade_in_duration).from(0.0)
-	await get_tree().create_timer(fade_in_duration).timeout
-	fade_in_tween.kill()
-	transitioning = false
+
+func _change_streams(stream: AudioStreamMP3) -> void:
+	dual_audio_server.currently_in_use.stream = stream
 
 func _on_progress_slider_dragged(value_changed: bool) -> void:
 	progress.dragging = false
-	if not audio_stream_player.stream:
+	if not dual_audio_server.currently_in_use.stream:
 		return
 	print(progress.value)
-	print(audio_stream_player.stream.get_length())
-	if audio_stream_player.playing and value_changed:
-		playback_position = (progress.value / 100.0) * audio_stream_player.stream.get_length()
-		audio_stream_player.seek(playback_position)
+	print(dual_audio_server.currently_in_use.stream.get_length())
+	if dual_audio_server.currently_in_use.playing and value_changed:
+		playback_position = (progress.value / 100.0) * dual_audio_server.currently_in_use.stream.get_length()
+		dual_audio_server.currently_in_use.seek(playback_position)
 
-func _on_audio_stream_player_finished() -> void:
+func _on_dual_audio_server_finished(server: AudioStreamPlayer) -> void:
+	print("Server finished")
 	playback_position = 0.0
-	audio_stream_player.play(playback_position)
+	server.play(playback_position)
