@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://baniflrstponb"]
+
+[ext_resource type="Script" uid="uid://bl505mtdm5d6m" path="res://src/fade/fade.gd" id="1_06rhc"]
+
+[node name="Fade" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_06rhc")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 38.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Fade out duration: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DurationLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="FadeSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+max_value = 5.0
+step = 0.1
+value = 4.0

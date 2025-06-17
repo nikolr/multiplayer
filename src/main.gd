@@ -10,6 +10,9 @@ class_name Main extends Node
 @export var progress: Progress
 @export var previous_button: Button
 @export var pause_button: Button
+
+@export var fade_out_slider: HSlider
+@export var fade_in_slider: HSlider
 #endregion
 
 #region Constants
@@ -19,6 +22,7 @@ const TRACK = preload("res://src/data/track_ui.tscn")
 #region Global
 var playback_position: float = 0.0
 var audio_queue: Array[Track]
+var transitioning: bool = false
 #endregion
 
 func _ready() -> void:
@@ -85,17 +89,28 @@ func _on_pause_button_pressed() -> void:
 		audio_stream_player.stop()
 
 func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
-	var tween: Tween = create_tween()
-	
+	if transitioning:
+		return
+	transitioning = true
+	var fade_out_tween: Tween = create_tween()
+	var fade_out_duration: float = clampf(fade_out_slider.value, 0.0, 5.0)
+	var fade_in_duration: float = clampf(fade_in_slider.value, 0.0, 5.0)
 	if audio_stream_player.playing:
-		print(audio_stream_player.volume_linear)
 		playback_position = audio_stream_player.get_playback_position()
+		fade_out_tween.tween_property(audio_stream_player, "volume_linear", 0.0, fade_out_duration).from(1.0)
+		await get_tree().create_timer(fade_out_duration).timeout
+		fade_out_tween.kill()
+	for t: TrackUi in track_list.get_children():
+		t.panel.hide()
 	audio_stream_player.stream = track_ui.track.stream
-	#audio_queue.erase(track_ui.track)
-	#audio_queue.push_front(track_ui.track)
 	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
-	tween.tween_property(audio_stream_player, "volume_linear", 1.0, 1.0).from(0.0)
+	var fade_in_tween: Tween = create_tween()
 	audio_stream_player.play(playback_position)
+	track_ui.panel.show()
+	fade_in_tween.tween_property(audio_stream_player, "volume_linear", 1.0, fade_in_duration).from(0.0)
+	await get_tree().create_timer(fade_in_duration).timeout
+	fade_in_tween.kill()
+	transitioning = false
 
 func _on_progress_slider_dragged(value_changed: bool) -> void:
 	progress.dragging = false

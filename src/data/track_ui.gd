@@ -3,6 +3,7 @@ class_name TrackUi extends Control
 @export var track: Track
 @export var button: Button
 @export var label: Label
+@export var panel: Panel
 
 @export var remove_button: Button
 @export var up_button: Button

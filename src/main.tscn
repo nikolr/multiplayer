@@ -7,7 +7,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
 bg_color = Color(0.219608, 0.247059, 0.278431, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "pause_button")]
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "pause_button", "fade_out_slider", "fade_in_slider")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +16,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_eewff")
-select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/AddAudioButton")
+select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/AddAudioButton")
 volume = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Volume")
 currently_playing_track_label = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/CurrentlyPlayingTrack")
 file_dialog = NodePath("FileDialog")
@@ -25,6 +25,8 @@ track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Tra
 progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
 previous_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PreviousButton")
 pause_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PauseButton")
+fade_out_slider = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeOutSlider")
+fade_in_slider = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -56,24 +58,57 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="AddAudioButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AddAudioButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 text = "Add audio"
 
-[node name="Volume" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" instance=ExtResource("2_5q4o7")]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+text = "Fade out duration"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FadeOutSlider" type="HSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+max_value = 5.0
+step = 0.01
+value = 1.0
+
+[node name="Label2" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+text = "Fade in duration"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FadeInSlider" type="HSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+max_value = 5.0
+step = 0.01
+value = 1.0
+ticks_on_borders = true
 
 [node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Volume" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" instance=ExtResource("2_5q4o7")]
+layout_mode = 2
+
 [node name="TrackList" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 50
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
