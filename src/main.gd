@@ -44,12 +44,23 @@ func _on_file_selected(path: String) -> void:
 	track_ui.button.pressed.connect(_on_track_play_button_pressed.bind(track_ui))
 	track_ui.up_button.pressed.connect(_on_up_button_pressed.bind(track_ui))
 	track_ui.down_button.pressed.connect(_on_down_button_pressed.bind(track_ui))
+	track_ui.remove_button.pressed.connect(_on_remove_button_pressed.bind(track_ui))
 	
 	track_list.add_child(track_ui)
 	if not audio_stream_player.stream:
 		var primary_track = audio_queue[0]
 		audio_stream_player.stream = primary_track.stream
 	print(audio_queue)
+
+func _on_remove_button_pressed(track_ui: TrackUi) -> void:
+	track_ui.button.pressed.disconnect(_on_track_play_button_pressed.bind(track_ui))
+	track_ui.up_button.pressed.disconnect(_on_up_button_pressed.bind(track_ui))
+	track_ui.down_button.pressed.disconnect(_on_down_button_pressed.bind(track_ui))
+	track_ui.remove_button.pressed.disconnect(_on_remove_button_pressed.bind(track_ui))
+	track_list.remove_child(track_ui)
+	if audio_stream_player.stream == track_ui.track.stream:
+		playback_position = audio_stream_player.get_playback_position()
+		audio_stream_player.stop()
 
 func _on_up_button_pressed(track_ui: TrackUi) -> void:
 	var position_in_track_list: int = track_list.get_children().find(track_ui)

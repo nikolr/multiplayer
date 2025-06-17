@@ -4,6 +4,7 @@ class_name TrackUi extends Control
 @export var button: Button
 @export var label: Label
 
+@export var remove_button: Button
 @export var up_button: Button
 @export var down_button: Button
 

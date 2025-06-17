@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bp5ag6lvspivr" path="res://src/data/track_ui.gd" id="1_cn277"]
 
-[node name="TrackUi" type="Control" node_paths=PackedStringArray("button", "label", "up_button", "down_button")]
+[node name="TrackUi" type="Control" node_paths=PackedStringArray("button", "label", "remove_button", "up_button", "down_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +13,7 @@ mouse_filter = 2
 script = ExtResource("1_cn277")
 button = NodePath("HBoxContainer/Button")
 label = NodePath("HBoxContainer/Label")
+remove_button = NodePath("HBoxContainer/RemoveButton")
 up_button = NodePath("HBoxContainer/VBoxContainer/UpButton")
 down_button = NodePath("HBoxContainer/VBoxContainer/DownButton")
 
@@ -38,6 +39,11 @@ layout_mode = 2
 [node name="MarginContainer3" type="MarginContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="RemoveButton" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+text = "Del"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
