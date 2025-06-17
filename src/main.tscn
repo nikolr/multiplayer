@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://cl4jks7xpnmrn"]
+[gd_scene load_steps=5 format=3 uid="uid://cl4jks7xpnmrn"]
 
 [ext_resource type="Script" uid="uid://brdgijv8fj12d" path="res://src/main.gd" id="1_eewff"]
+[ext_resource type="PackedScene" uid="uid://duugmeoe7cj1c" path="res://src/volume/volume.tscn" id="2_5q4o7"]
 [ext_resource type="PackedScene" uid="uid://d0ruut2thgwsq" path="res://src/progress/progress.tscn" id="2_gh0ne"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
 bg_color = Color(0.219608, 0.247059, 0.278431, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "currently_playing_track_label", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "pause_button")]
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "pause_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,6 +17,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_eewff")
 select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/AddAudioButton")
+volume = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Volume")
 currently_playing_track_label = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/CurrentlyPlayingTrack")
 file_dialog = NodePath("FileDialog")
 audio_stream_player = NodePath("AudioStreamPlayer")
@@ -58,6 +60,9 @@ theme_override_constants/separation = 12
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 text = "Add audio"
+
+[node name="Volume" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" instance=ExtResource("2_5q4o7")]
+layout_mode = 2
 
 [node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -2,6 +2,7 @@ class_name Main extends Node
 
 #region Exports
 @export var select_file_button: Button
+@export var volume: Volume
 @export var currently_playing_track_label: Label
 @export var file_dialog: FileDialog
 @export var audio_stream_player: AudioStreamPlayer
