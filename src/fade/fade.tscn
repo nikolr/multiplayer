@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bl505mtdm5d6m" path="res://src/fade/fade.gd" id="1_06rhc"]
 
-[node name="Fade" type="Control"]
+[node name="Fade" type="Control" node_paths=PackedStringArray("duration_label", "fade_slider")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_06rhc")
+duration_label = NodePath("VBoxContainer/HBoxContainer/DurationLabel")
+fade_slider = NodePath("VBoxContainer/FadeSlider")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -35,4 +37,4 @@ layout_mode = 2
 size_flags_vertical = 2
 max_value = 5.0
 step = 0.1
-value = 4.0
+value = 1.0

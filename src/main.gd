@@ -11,8 +11,8 @@ class_name Main extends Node
 @export var previous_button: Button
 @export var pause_button: Button
 
-@export var fade_out_slider: HSlider
-@export var fade_in_slider: HSlider
+@export var fade_out_slider: Fade
+@export var fade_in_slider: Fade
 #endregion
 
 #region Constants
@@ -93,8 +93,8 @@ func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
 		return
 	transitioning = true
 	var fade_out_tween: Tween = create_tween()
-	var fade_out_duration: float = clampf(fade_out_slider.value, 0.0, 5.0)
-	var fade_in_duration: float = clampf(fade_in_slider.value, 0.0, 5.0)
+	var fade_out_duration: float = fade_out_slider.fade_slider.value
+	var fade_in_duration: float = fade_in_slider.fade_slider.value
 	if audio_stream_player.playing:
 		playback_position = audio_stream_player.get_playback_position()
 		fade_out_tween.tween_property(audio_stream_player, "volume_linear", 0.0, fade_out_duration).from(1.0)

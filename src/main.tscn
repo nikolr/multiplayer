@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cl4jks7xpnmrn"]
+[gd_scene load_steps=6 format=3 uid="uid://cl4jks7xpnmrn"]
 
 [ext_resource type="Script" uid="uid://brdgijv8fj12d" path="res://src/main.gd" id="1_eewff"]
+[ext_resource type="PackedScene" uid="uid://baniflrstponb" path="res://src/fade/fade.tscn" id="2_3cfgd"]
 [ext_resource type="PackedScene" uid="uid://duugmeoe7cj1c" path="res://src/volume/volume.tscn" id="2_5q4o7"]
 [ext_resource type="PackedScene" uid="uid://d0ruut2thgwsq" path="res://src/progress/progress.tscn" id="2_gh0ne"]
 
@@ -69,33 +70,16 @@ text = "Add audio"
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 38
 
-[node name="Label" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+[node name="FadeOutSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" instance=ExtResource("2_3cfgd")]
 layout_mode = 2
-text = "Fade out duration"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="FadeOutSlider" type="HSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
+[node name="FadeInSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" instance=ExtResource("2_3cfgd")]
 layout_mode = 2
-size_flags_vertical = 2
-max_value = 5.0
-step = 0.01
-value = 1.0
 
-[node name="Label2" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-layout_mode = 2
-text = "Fade in duration"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="FadeInSlider" type="HSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 2
-max_value = 5.0
-step = 0.01
-value = 1.0
-ticks_on_borders = true
+[node name="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider/VBoxContainer/HBoxContainer" index="0"]
+text = "Fade in duration: "
 
 [node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -141,3 +125,5 @@ access = 2
 filters = PackedStringArray("*.mp3")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[editable path="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider"]
