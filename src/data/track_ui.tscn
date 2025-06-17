@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bp5ag6lvspivr" path="res://src/data/track_ui.gd" id="1_cn277"]
 
-[node name="TrackUi" type="Control" node_paths=PackedStringArray("button", "label")]
+[node name="TrackUi" type="Control" node_paths=PackedStringArray("button", "label", "up_button", "down_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,6 +13,8 @@ mouse_filter = 2
 script = ExtResource("1_cn277")
 button = NodePath("HBoxContainer/Button")
 label = NodePath("HBoxContainer/Label")
+up_button = NodePath("HBoxContainer/VBoxContainer/UpButton")
+down_button = NodePath("HBoxContainer/VBoxContainer/DownButton")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

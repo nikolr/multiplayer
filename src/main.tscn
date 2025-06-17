@@ -59,6 +59,7 @@ theme_override_constants/separation = 12
 [node name="AddAudioButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
+action_mode = 0
 text = "Add audio"
 
 [node name="Volume" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" instance=ExtResource("2_5q4o7")]
