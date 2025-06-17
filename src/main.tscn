@@ -6,7 +6,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
 bg_color = Color(0.219608, 0.247059, 0.278431, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "play_button", "pause_button")]
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "currently_playing_track_label", "file_dialog", "audio_stream_player", "track_list", "progress", "previous_button", "pause_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,12 +16,12 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_eewff")
 select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/AddAudioButton")
+currently_playing_track_label = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/CurrentlyPlayingTrack")
 file_dialog = NodePath("FileDialog")
 audio_stream_player = NodePath("AudioStreamPlayer")
 track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/TrackList")
 progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
 previous_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PreviousButton")
-play_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PlayButton")
 pause_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PauseButton")
 
 [node name="Control" type="Control" parent="."]
@@ -61,6 +61,8 @@ text = "Add audio"
 
 [node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="TrackList" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 50)
@@ -82,10 +84,6 @@ layout_mode = 2
 alignment = 1
 
 [node name="PreviousButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-
-[node name="PlayButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 

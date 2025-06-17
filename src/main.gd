@@ -2,12 +2,12 @@ class_name Main extends Node
 
 #region Exports
 @export var select_file_button: Button
+@export var currently_playing_track_label: Label
 @export var file_dialog: FileDialog
 @export var audio_stream_player: AudioStreamPlayer
 @export var track_list: VBoxContainer
 @export var progress: Progress
 @export var previous_button: Button
-@export var play_button: Button
 @export var pause_button: Button
 #endregion
 
@@ -24,7 +24,6 @@ func _ready() -> void:
 	select_file_button.pressed.connect(_on_select_file_button_pressed)
 	file_dialog.file_selected.connect(_on_file_selected)
 	previous_button.pressed.connect(_on_previous_button_pressed)
-	play_button.pressed.connect(_on_play_button_pressed)
 	pause_button.pressed.connect(_on_pause_button_pressed)
 	
 	progress.drag_ended.connect(_on_progress_slider_dragged)
@@ -53,10 +52,6 @@ func _on_previous_button_pressed() -> void:
 	if audio_stream_player.playing:
 		audio_stream_player.play(playback_position)
 
-func _on_play_button_pressed() -> void:
-	if audio_stream_player.stream and not audio_stream_player.playing:
-		audio_stream_player.play(playback_position)
-
 func _on_pause_button_pressed() -> void:
 	if audio_stream_player.stream and audio_stream_player.playing:
 		playback_position = audio_stream_player.get_playback_position()
@@ -68,6 +63,7 @@ func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
 	audio_stream_player.stream = track_ui.track.stream
 	#audio_queue.erase(track_ui.track)
 	#audio_queue.push_front(track_ui.track)
+	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
 	audio_stream_player.play(playback_position)
 
 func _on_progress_slider_dragged(value_changed: bool) -> void:

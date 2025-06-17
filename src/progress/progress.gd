@@ -8,7 +8,7 @@ func _ready() -> void:
 	drag_started.connect(_on_drag_started)
 
 func _process(delta: float) -> void:
-	if audio_stream_player.stream and not dragging:
+	if audio_stream_player.stream and audio_stream_player.playing and not dragging:
 		var progress: float = audio_stream_player.get_playback_position() / audio_stream_player.stream.get_length()
 		value = progress * 100
 
