@@ -11,4 +11,5 @@ func set_volume(track: Track) -> void:
 func _on_volume_slider_dragged(value_changed: bool) -> void:
 	if value_changed:
 		track_ui.track.volume = value
-		AudioServer.set_bus_volume_linear(0, track_ui.track.volume)
+		if track_ui.currently_playing:
+			AudioServer.set_bus_volume_linear(0, track_ui.track.volume)

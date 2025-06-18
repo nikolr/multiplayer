@@ -10,6 +10,8 @@ class_name TrackUi extends Control
 @export var up_button: Button
 @export var down_button: Button
 
+var currently_playing: bool = false
+
 func set_track(t: Track) -> void:
 	track = t
 	label.text = t.filename

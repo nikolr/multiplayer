@@ -25,10 +25,6 @@ var playback_position: float = 0.0
 var transitioning: bool = false
 #endregion
 
-##TEST
-func _process(delta: float) -> void:
-	print("Currently used volume: ", dual_audio_server.currently_in_use.volume_linear)
-
 func _ready() -> void:
 	select_file_button.pressed.connect(_on_select_file_button_pressed)
 	export_button.pressed.connect(_on_export_button_pressed)
@@ -46,25 +42,32 @@ func _ready() -> void:
 	dual_audio_server.secondary_audio_server.finished.connect(_on_dual_audio_server_finished.bind(dual_audio_server.secondary_audio_server))
 
 func _on_playlist_saved(path: String) -> void:
-	var tracks: Array[String] = []
+	var tracks: Array[Track] = []
 	for t in track_list.get_children():
-		tracks.append(t.track.path)
-	var playlist_data = JSON.stringify(tracks)
+		tracks.append(t.track)
+	var playlist: Playlist = Playlist.new()
+	playlist.track_list = tracks
+	var playlist_dict = {}
+	for t: Track in playlist.track_list:
+		playlist_dict[t.path] = t.volume
 	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_string(playlist_data)
+	file.store_string(JSON.stringify(playlist_dict))
 	file.close()
 
 func _on_playlist_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
 	var playlist = JSON.parse_string(file.get_as_text())
 	print(playlist)
-	var paths = JSON.parse_string(file.get_as_text())
 	for t in track_list.get_children():
 		_remove_track(t)
 	dual_audio_server.currently_in_use.stop()
 	playback_position = 0.0
 	progress.value = playback_position
-	_on_file_selected_from_playlist(paths)
+	for p in playlist:
+		print(p, ": ", playlist[p])
+		var track: Track = Track.create(p)
+		track.volume = playlist[p]
+		_on_file_selected_from_playlist(track)
 
 func _on_select_file_button_pressed() -> void:
 	file_dialog.show()
@@ -104,6 +107,10 @@ func _on_files_selected(paths: PackedStringArray) -> void:
 	for path: String in paths:
 		_on_file_selected(path)
 
+func _on_files_selected_from_playlist(tracks: Array[Track]) -> void:
+	for t: Track in tracks:
+		_on_file_selected_from_playlist(t)
+
 func _on_remove_button_pressed(track_ui: TrackUi) -> void:
 	_remove_track(track_ui)
 	if dual_audio_server.currently_in_use.stream == track_ui.track.stream:
@@ -140,17 +147,22 @@ func _on_pause_button_pressed() -> void:
 		dual_audio_server.currently_in_use.stop()
 
 func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
+	if dual_audio_server.transitioning:
+		return
 	if dual_audio_server.currently_in_use.playing:
 		playback_position = dual_audio_server.currently_in_use.get_playback_position()
 	dual_audio_server.transition(track_ui)
 	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
 	dual_audio_server.currently_in_use.play(playback_position)
 	for t: TrackUi in track_list.get_children():
+		if t.panel.visible:
+			t.currently_playing = false
 		t.panel.hide()
 	#dual_audio_server.currently_in_use.stream = track_ui.track.stream
 	#currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
 	#dual_audio_server.currently_in_use.play(playback_position)
 	track_ui.panel.show()
+	track_ui.currently_playing = true
 
 func _change_streams(stream: AudioStreamMP3) -> void:
 	dual_audio_server.currently_in_use.stream = stream

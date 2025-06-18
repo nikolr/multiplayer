@@ -5,6 +5,8 @@ class_name DualAudioServer extends Node
 @export var primary_audio_server: AudioStreamPlayer
 @export var secondary_audio_server: AudioStreamPlayer
 
+var transitioning: bool = false
+
 var currently_in_use: AudioStreamPlayer
 
 func _ready() -> void:
@@ -23,6 +25,7 @@ func get_not_in_use() -> AudioStreamPlayer:
 		return primary_audio_server
 
 func transition(track_ui: TrackUi) -> void:
+	transitioning = true
 	print("In use: ", currently_in_use)
 	var fade_out_duration: float = fade_out_slider.fade_slider.value
 	var fade_in_duration: float = fade_in_slider.fade_slider.value
@@ -31,11 +34,13 @@ func transition(track_ui: TrackUi) -> void:
 	get_not_in_use().stream = track_ui.track.stream
 	print(track_ui.track.volume)
 	tween.tween_callback(AudioServer.set_bus_volume_linear.bind(0, track_ui.track.volume))
-	tween.tween_property(get_not_in_use(), "volume_linear", track_ui.track.volume, fade_in_duration).from_current()
+	tween.tween_property(get_not_in_use(), "volume_linear", 1.0, fade_in_duration).from_current()
 	tween.connect("finished", on_tween_finished)
 	switch_currently_in_use()
 	print(currently_in_use.volume_linear)
 	print("In use: ", currently_in_use)
 
 func on_tween_finished() -> void:
+	print("HERE")
+	transitioning = false
 	get_not_in_use().seek(0)
