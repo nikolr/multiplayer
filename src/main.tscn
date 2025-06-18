@@ -9,7 +9,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
 bg_color = Color(0.219608, 0.247059, 0.278431, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "dual_audio_server", "track_list", "progress", "previous_button", "pause_button")]
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "volume", "currently_playing_track_label", "file_dialog", "playlist_export_file_dialog", "playlist_import_file_dialog", "export_button", "import_button", "dual_audio_server", "track_list", "progress", "previous_button", "pause_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,6 +22,10 @@ select_file_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxConta
 volume = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Volume")
 currently_playing_track_label = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/CurrentlyPlayingTrack")
 file_dialog = NodePath("FileDialog")
+playlist_export_file_dialog = NodePath("PlaylistExportFileDialog")
+playlist_import_file_dialog = NodePath("PlaylistImportFileDialog")
+export_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ExportButton")
+import_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ImportButton")
 dual_audio_server = NodePath("DualAudioServer")
 track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/TrackList")
 progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
@@ -81,6 +85,19 @@ layout_mode = 2
 [node name="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider/VBoxContainer/HBoxContainer" index="0"]
 text = "Fade in duration: "
 
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="ExportButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+custom_minimum_size = Vector2(52, 38)
+layout_mode = 2
+text = "Export"
+
+[node name="ImportButton" type="Button" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2"]
+custom_minimum_size = Vector2(52, 38)
+layout_mode = 2
+text = "Import"
+
 [node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 horizontal_alignment = 1
@@ -128,12 +145,18 @@ file_mode = 1
 access = 2
 filters = PackedStringArray("*.mp3")
 
-[node name="PlaylistFileDialog" type="FileDialog" parent="."]
+[node name="PlaylistExportFileDialog" type="FileDialog" parent="."]
+auto_translate_mode = 1
+ok_button_text = "Save"
+access = 1
+filters = PackedStringArray("*.playlist")
+
+[node name="PlaylistImportFileDialog" type="FileDialog" parent="."]
 auto_translate_mode = 1
 title = "Open a File"
 ok_button_text = "Open"
 file_mode = 0
-access = 2
-filters = PackedStringArray("*.mp3")
+access = 1
+filters = PackedStringArray("*.playlist")
 
 [editable path="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider"]
