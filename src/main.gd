@@ -47,26 +47,26 @@ func _on_playlist_saved(path: String) -> void:
 		tracks.append(t.track)
 	var playlist: Playlist = Playlist.new()
 	playlist.track_list = tracks
-	var playlist_dict = {}
+	var playlist_array: Array = []
 	for t: Track in playlist.track_list:
-		playlist_dict[t.path] = t.volume
+		var t_dict = {}
+		t_dict[t.path] = t.volume
+		playlist_array.append(t_dict)
 	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_string(JSON.stringify(playlist_dict))
+	file.store_string(JSON.stringify(playlist_array))
 	file.close()
 
 func _on_playlist_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
 	var playlist = JSON.parse_string(file.get_as_text())
-	print(playlist)
 	for t in track_list.get_children():
 		_remove_track(t)
 	dual_audio_server.currently_in_use.stop()
 	playback_position = 0.0
 	progress.value = playback_position
 	for p in playlist:
-		print(p, ": ", playlist[p])
-		var track: Track = Track.create(p)
-		track.volume = playlist[p]
+		var track: Track = Track.create(p.keys()[0])
+		track.volume = p.values()[0]
 		_on_file_selected_from_playlist(track)
 
 func _on_select_file_button_pressed() -> void:
