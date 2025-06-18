@@ -88,8 +88,8 @@ func _on_file_selected(path: String) -> void:
 	track_ui.remove_button.pressed.connect(_on_remove_button_pressed.bind(track_ui))
 	
 	track_list.add_child(track_ui)
-	if not dual_audio_server.currently_in_use.stream:
-		dual_audio_server.currently_in_use.stream = track.stream
+	#if not dual_audio_server.currently_in_use.stream:
+		#dual_audio_server.currently_in_use.stream = track.stream
 
 func _on_file_selected_from_playlist(track: Track) -> void:
 	var track_ui: TrackUi = TRACK.instantiate()
@@ -100,8 +100,8 @@ func _on_file_selected_from_playlist(track: Track) -> void:
 	track_ui.remove_button.pressed.connect(_on_remove_button_pressed.bind(track_ui))
 	
 	track_list.add_child(track_ui)
-	if not dual_audio_server.currently_in_use.stream:
-		dual_audio_server.currently_in_use.stream = track.stream
+	#if not dual_audio_server.currently_in_use.stream:
+		#dual_audio_server.currently_in_use.stream = track.stream
 
 func _on_files_selected(paths: PackedStringArray) -> void:
 	for path: String in paths:
@@ -123,6 +123,8 @@ func _remove_track(track_ui: TrackUi) -> void:
 	track_ui.down_button.pressed.disconnect(_on_down_button_pressed.bind(track_ui))
 	track_ui.remove_button.pressed.disconnect(_on_remove_button_pressed.bind(track_ui))
 	track_list.remove_child(track_ui)
+	if track_list.get_child_count() == 0:
+		playback_position = 0.0
 
 func _on_up_button_pressed(track_ui: TrackUi) -> void:
 	var position_in_track_list: int = track_list.get_children().find(track_ui)
@@ -151,20 +153,36 @@ func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
 		return
 	if dual_audio_server.currently_in_use.playing:
 		playback_position = dual_audio_server.currently_in_use.get_playback_position()
-	dual_audio_server.transition(track_ui)
-	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
-	dual_audio_server.currently_in_use.play(playback_position)
-	for t: TrackUi in track_list.get_children():
-		if t.panel.visible:
-			t.currently_playing = false
-		t.panel.hide()
-	#dual_audio_server.currently_in_use.stream = track_ui.track.stream
-	#currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
-	#dual_audio_server.currently_in_use.play(playback_position)
-	track_ui.panel.show()
-	track_ui.currently_playing = true
+		dual_audio_server.transition(track_ui)
+		currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+		dual_audio_server.currently_in_use.play(playback_position)
+		for t: TrackUi in track_list.get_children():
+			if t.panel.visible:
+				t.currently_playing = false
+			t.panel.hide()
+		#dual_audio_server.currently_in_use.stream = track_ui.track.stream
+		#currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+		#dual_audio_server.currently_in_use.play(playback_position)
+		track_ui.panel.show()
+		track_ui.currently_playing = true
+	else:
+		dual_audio_server.currently_in_use.stream = track_ui.track.stream
+		currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+		#AudioServer.set_bus_volume_linear(0, track_ui.track.volume)
+		#dual_audio_server.volume = track_ui.track.volume
+		Events.volume_changed.emit(track_ui)
+		dual_audio_server.currently_in_use.play(playback_position)
+		for t: TrackUi in track_list.get_children():
+			if t.panel.visible:
+				t.currently_playing = false
+			t.panel.hide()
+		#dual_audio_server.currently_in_use.stream = track_ui.track.stream
+		#currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
+		#dual_audio_server.currently_in_use.play(playback_position)
+		track_ui.panel.show()
+		track_ui.currently_playing = true
 
-func _change_streams(stream: AudioStreamMP3) -> void:
+func _change_streams(stream: AudioStream) -> void:
 	dual_audio_server.currently_in_use.stream = stream
 
 func _on_progress_slider_dragged(value_changed: bool) -> void:

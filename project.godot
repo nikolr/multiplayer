@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 ConfigFileHandler="*res://src/global/config_file_handler.gd"
+VolumeWrapper="*res://src/global/volume_wrapper.gd"
+Events="*res://src/global/events.gd"
 
 [gui]
 
