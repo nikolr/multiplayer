@@ -29,9 +29,12 @@ func transition(track_ui: TrackUi) -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(currently_in_use, "volume_linear", 0.0, fade_out_duration).from_current()
 	get_not_in_use().stream = track_ui.track.stream
-	tween.tween_property(get_not_in_use(), "volume_linear", 1.0, fade_in_duration).from_current()
+	print(track_ui.track.volume)
+	tween.tween_callback(AudioServer.set_bus_volume_linear.bind(0, track_ui.track.volume))
+	tween.tween_property(get_not_in_use(), "volume_linear", track_ui.track.volume, fade_in_duration).from_current()
 	tween.connect("finished", on_tween_finished)
 	switch_currently_in_use()
+	print(currently_in_use.volume_linear)
 	print("In use: ", currently_in_use)
 
 func on_tween_finished() -> void:

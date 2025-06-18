@@ -3,6 +3,7 @@ class_name Track extends Resource
 @export var stream: AudioStreamMP3
 @export var filename: String
 @export var path: String
+@export var volume: float = 1.0
 
 static func create(path: String) -> Track:
 	var track: Track = Track.new()

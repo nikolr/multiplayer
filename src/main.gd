@@ -2,7 +2,6 @@ class_name Main extends Node
 
 #region Exports
 @export var select_file_button: Button
-@export var volume: Volume
 @export var currently_playing_track_label: Label
 @export var file_dialog: FileDialog
 @export var playlist_export_file_dialog: FileDialog
@@ -25,6 +24,10 @@ const TRACK = preload("res://src/data/track_ui.tscn")
 var playback_position: float = 0.0
 var transitioning: bool = false
 #endregion
+
+##TEST
+func _process(delta: float) -> void:
+	print("Currently used volume: ", dual_audio_server.currently_in_use.volume_linear)
 
 func _ready() -> void:
 	select_file_button.pressed.connect(_on_select_file_button_pressed)
@@ -53,14 +56,15 @@ func _on_playlist_saved(path: String) -> void:
 
 func _on_playlist_selected(path: String) -> void:
 	var file = FileAccess.open(path, FileAccess.READ)
+	var playlist = JSON.parse_string(file.get_as_text())
+	print(playlist)
 	var paths = JSON.parse_string(file.get_as_text())
 	for t in track_list.get_children():
 		_remove_track(t)
 	dual_audio_server.currently_in_use.stop()
 	playback_position = 0.0
 	progress.value = playback_position
-	print(paths)
-	_on_files_selected(paths)
+	_on_file_selected_from_playlist(paths)
 
 func _on_select_file_button_pressed() -> void:
 	file_dialog.show()
@@ -73,6 +77,18 @@ func _on_import_button_pressed() -> void:
 
 func _on_file_selected(path: String) -> void:
 	var track: Track = Track.create(path)
+	var track_ui: TrackUi = TRACK.instantiate()
+	track_ui.set_track(track)
+	track_ui.button.pressed.connect(_on_track_play_button_pressed.bind(track_ui))
+	track_ui.up_button.pressed.connect(_on_up_button_pressed.bind(track_ui))
+	track_ui.down_button.pressed.connect(_on_down_button_pressed.bind(track_ui))
+	track_ui.remove_button.pressed.connect(_on_remove_button_pressed.bind(track_ui))
+	
+	track_list.add_child(track_ui)
+	if not dual_audio_server.currently_in_use.stream:
+		dual_audio_server.currently_in_use.stream = track.stream
+
+func _on_file_selected_from_playlist(track: Track) -> void:
 	var track_ui: TrackUi = TRACK.instantiate()
 	track_ui.set_track(track)
 	track_ui.button.pressed.connect(_on_track_play_button_pressed.bind(track_ui))
@@ -128,7 +144,6 @@ func _on_track_play_button_pressed(track_ui: TrackUi) -> void:
 		playback_position = dual_audio_server.currently_in_use.get_playback_position()
 	dual_audio_server.transition(track_ui)
 	currently_playing_track_label.text = "Now playing: " + track_ui.track.filename
-	print("Playback position: ", playback_position)
 	dual_audio_server.currently_in_use.play(playback_position)
 	for t: TrackUi in track_list.get_children():
 		t.panel.hide()
@@ -144,13 +159,10 @@ func _on_progress_slider_dragged(value_changed: bool) -> void:
 	progress.dragging = false
 	if not dual_audio_server.currently_in_use.stream:
 		return
-	print(progress.value)
-	print(dual_audio_server.currently_in_use.stream.get_length())
 	if dual_audio_server.currently_in_use.playing and value_changed:
 		playback_position = (progress.value / 100.0) * dual_audio_server.currently_in_use.stream.get_length()
 		dual_audio_server.currently_in_use.seek(playback_position)
 
 func _on_dual_audio_server_finished(server: AudioStreamPlayer) -> void:
-	print("Server finished")
 	playback_position = 0.0
 	server.play(playback_position)
