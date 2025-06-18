@@ -30,11 +30,11 @@ func transition(track_ui: TrackUi) -> void:
 	var fade_out_duration: float = fade_out_slider.fade_slider.value
 	var fade_in_duration: float = fade_in_slider.fade_slider.value
 	var tween: Tween = create_tween()
-	tween.tween_property(currently_in_use, "volume_linear", 0.0, fade_out_duration).from_current()
+	tween.tween_property(currently_in_use, "volume_linear", 0.2, fade_out_duration).from_current()
 	get_not_in_use().stream = track_ui.track.stream
 	print(track_ui.track.volume)
 	tween.tween_callback(AudioServer.set_bus_volume_linear.bind(0, track_ui.track.volume))
-	tween.tween_property(get_not_in_use(), "volume_linear", 1.0, fade_in_duration).from_current()
+	tween.tween_property(get_not_in_use(), "volume_linear", 1.0, fade_in_duration).from(0.2)
 	tween.connect("finished", on_tween_finished)
 	switch_currently_in_use()
 	print(currently_in_use.volume_linear)
@@ -44,3 +44,4 @@ func on_tween_finished() -> void:
 	print("HERE")
 	transitioning = false
 	get_not_in_use().seek(0)
+	get_not_in_use().stop()
