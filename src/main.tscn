@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cl4jks7xpnmrn"]
+[gd_scene load_steps=7 format=3 uid="uid://cl4jks7xpnmrn"]
 
 [ext_resource type="Script" uid="uid://brdgijv8fj12d" path="res://src/main.gd" id="1_eewff"]
 [ext_resource type="PackedScene" uid="uid://baniflrstponb" path="res://src/fade/fade.tscn" id="2_3cfgd"]
 [ext_resource type="PackedScene" uid="uid://d0ruut2thgwsq" path="res://src/progress/progress.tscn" id="2_gh0ne"]
+[ext_resource type="PackedScene" uid="uid://c2xyry5xdhm0m" path="res://src/volume/master_volume_slider.tscn" id="3_fyndt"]
 [ext_resource type="PackedScene" uid="uid://d26f0f6t0ome1" path="res://src/audio/audio_server.tscn" id="5_fyndt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
@@ -82,6 +83,9 @@ layout_mode = 2
 
 [node name="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer/FadeInSlider/VBoxContainer/HBoxContainer" index="0"]
 text = "Fade in duration: "
+
+[node name="MasterVolumeSlider" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer" instance=ExtResource("3_fyndt")]
+layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
