@@ -62,6 +62,7 @@ func _on_playlist_selected(path: String) -> void:
 	for t in track_list.get_children():
 		_remove_track(t)
 	dual_audio_server.currently_in_use.stop()
+	currently_playing_track_label.text = ""
 	playback_position = 0.0
 	progress.value = playback_position
 	for p in playlist:
@@ -145,6 +146,7 @@ func _on_previous_button_pressed() -> void:
 
 func _on_pause_button_pressed() -> void:
 	if dual_audio_server.currently_in_use.stream and dual_audio_server.currently_in_use.playing:
+		currently_playing_track_label.text = "Paused..."
 		playback_position = dual_audio_server.currently_in_use.get_playback_position()
 		dual_audio_server.currently_in_use.stop()
 
