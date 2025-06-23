@@ -26,7 +26,7 @@ playlist_import_file_dialog = NodePath("PlaylistImportFileDialog")
 export_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ExportButton")
 import_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/VBoxContainer2/ImportButton")
 dual_audio_server = NodePath("DualAudioServer")
-track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/TrackList")
+track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/ScrollContainer/TrackList")
 progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
 previous_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PreviousButton")
 pause_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PauseButton")
@@ -105,15 +105,22 @@ layout_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TrackList" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="TopBorderPanel" type="Panel" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+[node name="TrackList" type="VBoxContainer" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/ScrollContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 2
+
+[node name="BottomBorderPanel" type="Panel" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
 
 [node name="Progress" parent="Control/PanelContainer2/MarginContainer/VBoxContainer" node_paths=PackedStringArray("dual_audio_server") instance=ExtResource("2_gh0ne")]
 layout_mode = 2
