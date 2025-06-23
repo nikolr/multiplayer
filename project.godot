@@ -11,9 +11,11 @@ config_version=5
 [application]
 
 config/name="Multiplayer"
+config/version="1.0.0"
 run/main_scene="uid://cl4jks7xpnmrn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://y81agmc5sjwm"
+config/windows_native_icon="res://assets/icons/icon.ico"
 
 [autoload]
 

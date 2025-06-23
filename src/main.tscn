@@ -142,7 +142,6 @@ filters = PackedStringArray("*.mp3", "*.wav")
 
 [node name="PlaylistExportFileDialog" type="FileDialog" parent="."]
 auto_translate_mode = 1
-ok_button_text = "Save"
 access = 1
 filters = PackedStringArray("*.playlist")
 
