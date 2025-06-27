@@ -13,6 +13,7 @@ class_name Main extends Node
 @export var progress: Progress
 @export var previous_button: Button
 @export var pause_button: Button
+@export var hostt: Host
 
 #endregion
 
@@ -23,9 +24,32 @@ const TRACK = preload("res://src/data/track_ui.tscn")
 #region Global
 var playback_position: float = 0.0
 var transitioning: bool = false
+var mode: ConfigFileHandler.Mode
+#endregion
+
+#region Multiplayer
+signal upnp_completed(error)
+var thread: Thread = null
+var multiplayer_peer = ENetMultiplayerPeer.new()
+var upnp = UPNP.new()
+
+const PORT = 9475
+
+var connected_peers: Array[Peer] = []
 #endregion
 
 func _ready() -> void:
+	mode = ConfigFileHandler.load_mode_setting()
+	match mode:
+		ConfigFileHandler.Mode.LOCAL:
+			hostt.hide()
+		ConfigFileHandler.Mode.HOST:
+			hostt.show()
+			# Connect signals here
+	print(mode)
+	
+	tree_exited.connect(_on_tree_exited)
+	upnp_completed.connect(_on_upnp_completed)
 	select_file_button.pressed.connect(_on_select_file_button_pressed)
 	export_button.pressed.connect(_on_export_button_pressed)
 	import_button.pressed.connect(_on_import_button_pressed)
@@ -40,6 +64,45 @@ func _ready() -> void:
 	
 	dual_audio_server.primary_audio_server.finished.connect(_on_dual_audio_server_finished.bind(dual_audio_server.primary_audio_server))
 	dual_audio_server.secondary_audio_server.finished.connect(_on_dual_audio_server_finished.bind(dual_audio_server.secondary_audio_server))
+	
+	setup_server()
+
+
+func setup_server() -> void:
+	thread = Thread.new()
+	thread.start(forward_port)
+	
+	var err = multiplayer_peer.create_server(PORT)
+	multiplayer_peer
+	print("This is err: ", err)
+	multiplayer.multiplayer_peer = multiplayer_peer
+	#multiplayer_peer.peer_connected.connect(_on_peer_connected)
+	multiplayer_peer.peer_disconnected.connect(_on_peer_disconnected)
+	print("Server is up and running.")
+
+func forward_port() -> void:
+	var err = upnp.discover()
+	print(err)
+	if err != OK:
+		push_error(str(err))
+		upnp_completed.emit(err)
+		return
+	
+	for i in range(upnp.get_device_count()):
+		print("Device found: ", upnp.get_device(i))
+	print("Gateway: ", upnp.get_gateway())
+	print("ADDR: ", upnp.query_external_address())
+	
+	if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+		print("DID this")
+		var udp_res = upnp.add_port_mapping(PORT, PORT, ProjectSettings.get_setting("application/config/name"), "UDP")
+		print(udp_res)
+		var gateway_udp_res = upnp.get_gateway().add_port_mapping(PORT, PORT, ProjectSettings.get_setting("application/config/name"), "UDP")
+		print(gateway_udp_res)
+		var tcp_res = upnp.add_port_mapping(PORT, PORT, ProjectSettings.get_setting("application/config/name"), "TCP")
+		print(tcp_res)
+		var gateway_tcp_res = upnp.get_gateway().add_port_mapping(PORT, PORT, ProjectSettings.get_setting("application/config/name"), "TCP")
+		print(gateway_tcp_res)
 
 func _on_playlist_saved(path: String) -> void:
 	var tracks: Array[Track] = []
@@ -186,3 +249,39 @@ func _on_progress_slider_dragged(value_changed: bool) -> void:
 func _on_dual_audio_server_finished(server: AudioStreamPlayer) -> void:
 	playback_position = 0.0
 	server.play(playback_position)
+
+#region Multiplayer
+@rpc("any_peer", "reliable")
+func register_client(id: int, username: String) -> void:
+	print(id)
+	print(username)
+	var peer: Peer = Peer.new()
+	peer.id = id
+	peer.username = username
+	connected_peers.append(peer)
+	hostt.add_client(peer)
+
+func _on_peer_disconnected(leaving_peer_id : int) -> void:
+	# The disconnect signal fires before the client is removed from the connected
+	# clients in multiplayer.get_peers(), so we wait for a moment.
+	await get_tree().create_timer(1).timeout 
+	remove_player(leaving_peer_id)
+
+func remove_player(leaving_peer_id : int) -> void:
+	var peer_idx_in_peer_list : int
+	for i in range(connected_peers.size()):
+		if connected_peers[i].id == leaving_peer_id:
+			peer_idx_in_peer_list = i
+			break
+	var removed_peer: Peer
+	if peer_idx_in_peer_list != -1:
+		removed_peer = connected_peers.pop_at(peer_idx_in_peer_list)
+	hostt.remove_client(removed_peer)
+	print("Player " + str(leaving_peer_id) + " disconnected.")
+#endregion
+
+func _on_tree_exited() -> void:
+	thread.wait_to_finish()
+
+func _on_upnp_completed(err: UPNP.UPNPResult) -> void:
+	thread.wait_to_finish()

@@ -1,15 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://cl4jks7xpnmrn"]
+[gd_scene load_steps=8 format=3 uid="uid://cl4jks7xpnmrn"]
 
 [ext_resource type="Script" uid="uid://brdgijv8fj12d" path="res://src/main.gd" id="1_eewff"]
 [ext_resource type="PackedScene" uid="uid://baniflrstponb" path="res://src/fade/fade.tscn" id="2_3cfgd"]
 [ext_resource type="PackedScene" uid="uid://d0ruut2thgwsq" path="res://src/progress/progress.tscn" id="2_gh0ne"]
 [ext_resource type="PackedScene" uid="uid://c2xyry5xdhm0m" path="res://src/volume/master_volume_slider.tscn" id="3_fyndt"]
+[ext_resource type="PackedScene" uid="uid://n3mmtqmeagf6" path="res://src/multi/host.tscn" id="4_kmhfv"]
 [ext_resource type="PackedScene" uid="uid://d26f0f6t0ome1" path="res://src/audio/audio_server.tscn" id="5_fyndt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mun2e"]
 bg_color = Color(0.219608, 0.247059, 0.278431, 1)
 
-[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "currently_playing_track_label", "file_dialog", "playlist_export_file_dialog", "playlist_import_file_dialog", "export_button", "import_button", "dual_audio_server", "track_list", "progress", "previous_button", "pause_button")]
+[node name="Main" type="Control" node_paths=PackedStringArray("select_file_button", "currently_playing_track_label", "file_dialog", "playlist_export_file_dialog", "playlist_import_file_dialog", "export_button", "import_button", "dual_audio_server", "track_list", "progress", "previous_button", "pause_button", "hostt")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,6 +31,7 @@ track_list = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Scr
 progress = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/Progress")
 previous_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PreviousButton")
 pause_button = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer/PauseButton")
+hostt = NodePath("Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2/Host")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -99,6 +101,9 @@ text = "Export"
 custom_minimum_size = Vector2(52, 38)
 layout_mode = 2
 text = "Import"
+
+[node name="Host" parent="Control/PanelContainer2/MarginContainer/VBoxContainer/HBoxContainer2" instance=ExtResource("4_kmhfv")]
+layout_mode = 2
 
 [node name="CurrentlyPlayingTrack" type="Label" parent="Control/PanelContainer2/MarginContainer/VBoxContainer"]
 layout_mode = 2

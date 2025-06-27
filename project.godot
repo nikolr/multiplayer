@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Multiplayer"
 config/version="1.0.0"
-run/main_scene="uid://cl4jks7xpnmrn"
+run/main_scene="uid://bfsld6ui4s7sg"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="uid://y81agmc5sjwm"
 config/windows_native_icon="res://assets/icons/icon.ico"

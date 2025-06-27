@@ -1,0 +1,146 @@
+[gd_scene load_steps=2 format=3 uid="uid://qg8a6cvmnboy"]
+
+[ext_resource type="Script" uid="uid://6etyoiugaor6" path="res://src/multi/client.gd" id="1_s6geb"]
+
+[node name="Main" type="Control" node_paths=PackedStringArray("connect_button", "disconnect_button", "ip_text_edit", "username_text_edit", "connection_status")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s6geb")
+connect_button = NodePath("VBoxContainer/ConnectButton")
+disconnect_button = NodePath("VBoxContainer/DisconnectButton")
+ip_text_edit = NodePath("IPTextEdit")
+username_text_edit = NodePath("UsernameTextEdit")
+connection_status = NodePath("HBoxContainer/ConnectionStatus")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -164.0
+offset_right = 20.5
+offset_bottom = -146.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Lobby"
+
+[node name="IpLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -141.0
+offset_right = 21.0
+offset_bottom = -123.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "IP address"
+
+[node name="IPTextEdit" type="TextEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -120.0
+offset_right = 48.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "127.0.0.1"
+placeholder_text = "198.168.0.1"
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+
+[node name="UsernameLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -83.0
+offset_right = 21.0
+offset_bottom = -65.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Username"
+
+[node name="UsernameTextEdit" type="TextEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -65.0
+offset_right = 48.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "N4ksu"
+placeholder_text = "N4ksu"
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConnectionStatusLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Connection status: "
+
+[node name="ConnectionStatus" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Disconnected"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = 66.0
+offset_right = 60.0
+offset_bottom = 122.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ConnectButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Connect"
+
+[node name="DisconnectButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Disconnect"

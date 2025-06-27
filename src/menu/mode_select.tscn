@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfsld6ui4s7sg"]
+
+[ext_resource type="Script" uid="uid://dxq7wgd8n4auc" path="res://src/menu/mode_select.gd" id="1_m6j7x"]
+
+[node name="ModeSelect" type="Control" node_paths=PackedStringArray("host_button", "client_button", "local_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m6j7x")
+host_button = NodePath("VBoxContainer/HostButton")
+client_button = NodePath("VBoxContainer/ClientButton")
+local_button = NodePath("VBoxContainer/LocalButton")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 157.0
+offset_right = 20.0
+offset_bottom = 175.0
+grow_horizontal = 2
+text = "Select mode"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -96.0
+offset_right = 60.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="HostButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Host"
+
+[node name="ClientButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Client"
+
+[node name="LocalButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Local"
